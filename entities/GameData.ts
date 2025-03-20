@@ -6,19 +6,34 @@ import { Input } from "./Input";
 
 export class GameData {
     ctx: CanvasRenderingContext2D;
-    arena: Arena;
     entities: Entity[] = [];
     input: Input;
     score: number;
 
-    constructor(ctx: CanvasRenderingContext2D) {
+    verticalMargin: number = 0;
+    horizontalMargin: number = 0;
+    maxVerticalMargin: number = 0;
+    bumpAmount: number;
+
+    constructor(ctx: CanvasRenderingContext2D, bumpAmount: number, maxVerticalMargin: number) {
         this.ctx = ctx;
-        this.arena = new Arena(new Vec2(ctx.canvas.width, ctx.canvas.height));
         this.input = new Input();
         this.score = 0;
+        this.bumpAmount = bumpAmount;
+        this.maxVerticalMargin = maxVerticalMargin;
     }
 
     addEntity(entity: Entity) {
         this.entities.push(entity);
+    }
+
+    bump() {
+        if (this.verticalMargin < this.maxVerticalMargin) {
+            this.verticalMargin += this.bumpAmount;
+        } else {
+            this.horizontalMargin += this.bumpAmount;
+        }
+
+        this.score++;
     }
 }

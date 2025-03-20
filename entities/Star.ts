@@ -34,29 +34,25 @@ export class Star implements Entity{
     }
 
     warp() {
-        const width = this.data.arena.size.x;
-        const halfWidth = width / 2
-        const originalHalfWidth = this.data.arena.originalSize.x / 2
+        const width = this.data.ctx.canvas.width;
+        const height = this.data.ctx.canvas.height;
+       
+        const negativeMargin = -this.radius*2
+        const positiveHorizontalMargin = width + this.radius*2
+        const positiveVerticalMargin = height + this.radius*2
 
-        if (this.x < originalHalfWidth - halfWidth - this.radius * 2) {
-            this.x = originalHalfWidth + halfWidth + this.radius * 2
+        if (this.x < negativeMargin) {
+            this.x = positiveHorizontalMargin
         }
-        else if (this.x > originalHalfWidth + halfWidth + this.radius * 2) {
-            this.x = originalHalfWidth - halfWidth - this.radius * 2
+        else if (this.x > positiveHorizontalMargin) {
+            this.x = negativeMargin
         }
 
-        const height = this.data.arena.size.y;
-        const halfHeight = height / 2
-        const originalHalfHeight = this.data.arena.originalSize.y / 2
-
-        const top = originalHalfHeight - halfHeight - this.radius * 2
-        const bottom = originalHalfHeight + halfHeight + this.radius * 2
-
-        if (this.y < top) {
-            this.y = bottom
+        if (this.y < negativeMargin) {
+            this.y = positiveVerticalMargin
         }
-        else if (this.y > bottom) {
-            this.y = top
+        else if (this.y > positiveVerticalMargin) {
+            this.y = negativeMargin
         }
     }
     

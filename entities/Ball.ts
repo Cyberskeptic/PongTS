@@ -40,33 +40,39 @@ export class Ball implements Entity {
     }
 
     walls(){
-        const height = this.data.arena.size.x;
-        const width = this.data.arena.size.y;
+        const width = this.data.ctx.canvas.width;
+        const height = this.data.ctx.canvas.height;
 
-        const offLeftEdge = this.position.x < this.radius
-        const offRightEdge = this.position.x > width - this.radius
+        const leftEdge = this.radius
+        const rightEdge = width - this.data.horizontalMargin - this.radius
+        const topEdge = this.radius + this.data.verticalMargin
+        const bottomEdge = height - this.data.verticalMargin - this.radius
+
+        const offLeftEdge = this.position.x < leftEdge
+        const offRightEdge = this.position.x > rightEdge
 
         if (offLeftEdge) {
             this.bounceX()
-            this.position.x = this.radius // get back on screen
+            this.position.x = leftEdge
         }
 
         if (offRightEdge) {
+            this.data.bump()
             this.bounceX()
-            this.position.x = width - this.radius // get back on screen
+            this.position.x = rightEdge - this.data.bumpAmount
         }
 
-        const offTopEdge = this.position.y < this.radius
-        const offBottomEdge = this.position.y > height - this.radius
+        const offTopEdge = this.position.y < topEdge
+        const offBottomEdge = this.position.y > bottomEdge
 
         if (offTopEdge) {
             this.bounceY()
-            this.position.y = this.radius
+            this.position.y = topEdge
         }
 
         if (offBottomEdge) {
             this.bounceY()
-            this.position.y = height - this.radius
+            this.position.y = bottomEdge
         }
     }
 

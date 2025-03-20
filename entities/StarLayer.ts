@@ -36,8 +36,8 @@ export class StarLayer implements Entity {
             this.entities.push(
                 new Star(
                     this.data,
-                    Math.random() * this.data.arena.size.x,
-                    Math.random() * this.data.arena.size.y,
+                    Math.random() * this.data.ctx.canvas.width,
+                    Math.random() * this.data.ctx.canvas.height,
                     dx,
                     dy,
                     this.size,

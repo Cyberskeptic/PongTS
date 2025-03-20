@@ -15,3 +15,19 @@ export function drawCircle(ctx, x, y, r, color) {
 export function clear(canvas, ctx, color) {
     drawSquare(ctx, 0, 0, canvas.width, canvas.height, color);
 }
+
+function measureTextSize(ctx, text) {
+    const metrics = ctx.measureText(text);
+    const width = metrics.width; // Exact width
+    const height = Math.abs(metrics.actualBoundingBoxAscent) + Math.abs(metrics.actualBoundingBoxDescent) || parseInt(ctx.font); // Estimate height
+    return { width, height };
+} // you're welcome :)
+
+export function drawText(ctx, text, color, fontSize, position) {
+    ctx.font = `${fontSize}px Arial`; // You can change Arial to your preferred font
+    ctx.fillStyle = color;
+    const size = measureTextSize(ctx, text);
+    const x = position.x - size.width / 2;
+    const y = position.y + size.height / 2;
+    ctx.fillText(text, x, y);
+}

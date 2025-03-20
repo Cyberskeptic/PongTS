@@ -1,16 +1,46 @@
 import { Vec2 } from "../utils";
+import { drawSquare } from "./drawing";
+import { Entity } from "./Entity";
+import { GameData } from "./GameData";
 
 
-export class Arena {
-    originalSize: Vec2
-    size: Vec2
+export class Arena implements Entity {
+    data: GameData;
 
-    constructor(size: Vec2) {
-        this.originalSize = size
-        this.size = size
+    constructor(data: GameData) {
+        this.data = data;
     }
 
-    get y() {
-        return this.originalSize.y / 2 - this.size.y / 2
+    update() {
+        // Do nothing
     }
+
+    draw() {
+        drawSquare(
+            this.data.ctx,
+            0, 0,
+            this.data.ctx.canvas.width,
+            this.data.verticalMargin,
+            'white'
+        )
+
+        drawSquare(
+            this.data.ctx,
+            0, this.data.ctx.canvas.height - this.data.verticalMargin,
+            this.data.ctx.canvas.width,
+            this.data.verticalMargin,
+            'white'
+        )
+
+        drawSquare(
+            this.data.ctx,
+            this.data.ctx.canvas.width - this.data.horizontalMargin, 0,
+            this.data.horizontalMargin,
+            this.data.ctx.canvas.height,
+            'white'
+        )
+        
+    }
+
+
 }

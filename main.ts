@@ -9,7 +9,8 @@ import { Ball } from "./entities/Ball"
 import { Paddle } from "./entities/Paddle"
 import { Input } from "./entities/Input"
 import { GameData } from "./entities/GameData"
-
+import { Arena } from "./entities/Arena"
+import { Scoreboard } from "./entities/scoreboard"
 
 
 class App {
@@ -22,7 +23,7 @@ class App {
     constructor(ctx: CanvasRenderingContext2D) {
         this.canvas = ctx.canvas
         this.ctx = ctx
-        this.data = new GameData(ctx)
+        this.data = new GameData(ctx, 10, ctx.canvas.height * .25)
         this.field = null
     }
 
@@ -42,20 +43,18 @@ class App {
             dy,
         )
 
-        window.addEventListener("mousedown", e => {
-            this.data.arena.size.y -= 10
-        })
-
-        const ballPosition = new Vec2(this.canvas.width / 2 + 1, this.canvas.height / 2 + 1) // ???
-        const ballVelocity = new Vec2(5, 6)
+        const ballPosition = new Vec2(this.canvas.width / 2, this.canvas.height / 2)
+        const ballVelocity = new Vec2(Math.random() * 3 + 4, 4)
 
         const paddleSize = new Vec2(5, 70)
         const paddlePosition = new Vec2(30, this.canvas.height / 2)
-        this.paddle = new Paddle(this.ctx, paddlePosition, 5, paddleSize, "white")
+        this.paddle = new Paddle(this.data, paddlePosition, 5, paddleSize, "white")
 
         this.data.addEntity(this.field)
         this.data.addEntity(this.paddle)
         this.data.addEntity(new Ball(this.data, ballPosition, ballVelocity, 5, "white"))
+        this.data.addEntity(new Arena(this.data))
+        this.data.addEntity(new Scoreboard(this.data, 20, "red"))
 
         this.tick()
     }
