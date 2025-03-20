@@ -1,77 +1,92 @@
-import { between, getContext, randomColor } from "./utils"
+import {  between, getContext, randomColor, Vec2} from "./utils"
 import { drawSquare, drawCircle, clear } from "./entities/drawing"
 import { Square } from "./entities/Square"
 import { Star } from "./entities/Star"
 import { Entity } from "./entities/Entity"
 import { StarLayer } from "./entities/StarLayer"
 import { StarField } from "./entities/StarField"
+import { Ball } from "./entities/Ball"
+import { Paddle } from "./entities/Paddle"
+import { Input } from "./entities/Input"
+import { GameData } from "./entities/GameData"
+
 
 
 class App {
-    entities: Entity[]
-    canvas: HTMLCanvasElement | null
-    ctx: CanvasRenderingContext2D | null
+    data: GameData
+    canvas: HTMLCanvasElement
+    ctx: CanvasRenderingContext2D
     field: StarField | null = null
-    
-    constructor() {
-        this.entities = []
-        this.canvas = null
-        this.ctx = null
-        this.field = null    
+    paddle: Paddle | null = null
+
+    constructor(ctx: CanvasRenderingContext2D) {
+        this.canvas = ctx.canvas
+        this.ctx = ctx
+        this.data = new GameData(ctx)
+        this.field = null
     }
 
     boot() {
-        const [canvas, ctx] = getContext("canvas", "2d");
-        this.canvas = canvas
-        this.ctx = ctx
-
         const layers = 6
         const starCount: [number, number] = [180, 20]
-        const size: [number, number] = [0.1, 2]
+        const size: [number, number] = [0.8, 2]
         const dx: [number, number] = [0.1, 1]
         const dy: [number, number] = [0.1, 1]
-        const colors: string[] = []
-        for (let i = 0; i < layers; i++) {
-            colors.push(randomColor())
-        }
 
         this.field = new StarField(
-            this.ctx,
+            this.data,
             layers,
             size,
             starCount,
             dx,
             dy,
-            colors,
         )
 
-        this.entities = [
-            this.field,
-            new Square(ctx, 100, 100, 50, "red"),
-            new Square(ctx, 200, 200, 50, "green"),
-            new Square(ctx, 300, 300, 50, "blue"),
-        ]
+        window.addEventListener("mousedown", e => {
+            this.data.arena.size.y -= 10
+        })
 
-        this.tick()    
+        const ballPosition = new Vec2(this.canvas.width / 2 + 1, this.canvas.height / 2 + 1) // ???
+        const ballVelocity = new Vec2(5, 6)
+
+        const paddleSize = new Vec2(5, 70)
+        const paddlePosition = new Vec2(30, this.canvas.height / 2)
+        this.paddle = new Paddle(this.ctx, paddlePosition, 5, paddleSize, "white")
+
+        this.data.addEntity(this.field)
+        this.data.addEntity(this.paddle)
+        this.data.addEntity(new Ball(this.data, ballPosition, ballVelocity, 5, "white"))
+
+        this.tick()
     }
 
     draw() {
         clear(this.canvas, this.ctx, "black")
-        this.entities.forEach(entity => entity.draw())
+        this.data.entities.forEach(entity => entity.draw())
     }
-    
+
     update() {
-        this.entities.forEach(entity => entity.update())
+        if (this.paddle) {
+            if (this.data.input.isKeyDown("w")) {
+                this.paddle.state = "up"
+            } else if (this.data.input.isKeyDown("s")) {
+                this.paddle.state = "down"
+            } else {
+                this.paddle.state = "none"
+            }
+        }
+        this.data.entities.forEach(entity => entity.update())
     }
-    
+
     tick() {
         this.update()
         this.draw()
         requestAnimationFrame(() => this.tick())
-    }    
+    }
 }
 
 export function boot() {
-    const app = new App()
+    const [canvas, ctx] = getContext("canvas", "2d");
+    const app = new App(ctx)
     app.boot()
 }

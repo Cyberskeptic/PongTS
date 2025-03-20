@@ -1,51 +1,47 @@
 import { Star } from "./Star";
 import { Entity } from "./Entity";
-import { between, getContext } from "../utils";
+import { between, getContext, randomColor, Vec2 } from "../utils";
+import { GameData } from "./GameData";
 
 export class StarLayer implements Entity {
+    data: GameData
     entities: Entity[];
-    canvas: HTMLCanvasElement 
-    ctx: CanvasRenderingContext2D
     numStars: number
-    color: string
+    // color: string
     velocity: [number, number]
     size: number
 
 
-    constructor(ctx, numStars, color, velocity, size) { // <--- add parameters here
+    constructor(
+        data: GameData, 
+        numStars: number, 
+        velocity: [number, number], 
+        size: number,
+    ) {
         this.entities = [];
-        this.ctx = ctx;
-        this.canvas = ctx.canvas
-
-
+        this.data = data;
         this.numStars = numStars;
-        this.color = color;
         this.velocity = velocity;
         this.size = size;
-
-
         this.createStars();
     }
 
-
-
     createStars() {
-        this.canvas
-        this.ctx
+        this.data
         console.log(`creating ${this.numStars} stars`)
         for (let i = 0; i < this.numStars; i++) {
 
             const [dx, dy] = this.velocity; // this is called destructuring
-
+            const color = randomColor();
             this.entities.push(
                 new Star(
-                    this.ctx,
-                    Math.random() * this.canvas.width,
-                    Math.random() * this.canvas.height,
+                    this.data,
+                    Math.random() * this.data.arena.size.x,
+                    Math.random() * this.data.arena.size.y,
                     dx,
                     dy,
                     this.size,
-                    this.color
+                    color
                 )
             );
         }

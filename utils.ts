@@ -43,10 +43,45 @@ export function lerp(min: number, max: number, chunks: number) { // <-- paramete
 }
 
 export const randomColor = () => {
-    const min = 150
+    const min = 50
     const max = 255
     const r = between(min, max)
     const g = between(min, max)
     const b = between(min, max)
     return `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`
+}
+
+export class Vec2 {
+    x: number
+    y: number
+
+    constructor(x: number, y: number) {
+        this.x = x
+        this.y = y
+    }
+
+    add(other: Vec2) {
+        this.x += other.x // <-- it's this.x which is modified, so the Vec2 whos add method is called is modified
+        this.y += other.y
+    }
+
+    sub(other: Vec2) {
+        this.x -= other.x
+        this.y -= other.y
+    }
+
+    scale(scalar: number) {
+        this.x *= scalar
+        this.y *= scalar
+    }
+
+    mag() {
+        return Math.sqrt(this.x ** 2 + this.y ** 2)
+    }
+
+    normalize() {
+        const mag = this.mag()
+        this.x /= mag
+        this.y /= mag
+    }
 }
