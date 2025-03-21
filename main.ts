@@ -52,7 +52,7 @@ class App {
 
         this.data.addEntity(this.field)
         this.data.addEntity(this.paddle)
-        this.data.addEntity(new Ball(this.data, ballPosition, ballVelocity, 5, "white"))
+        this.data.addEntity(new Ball(this.data, this.paddle, ballPosition, ballVelocity, 5, "white"))
         this.data.addEntity(new Arena(this.data))
         this.data.addEntity(new Scoreboard(this.data, 20, "red"))
 

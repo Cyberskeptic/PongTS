@@ -84,4 +84,10 @@ export class Vec2 {
         this.x /= mag
         this.y /= mag
     }
+
+    distanceSquared(other: Vec2) {
+        const dx = this.x - other.x
+        const dy = this.y - other.y
+        return dx ** 2 + dy ** 2
+    }
 }
