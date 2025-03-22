@@ -50,10 +50,10 @@ class App {
         const paddlePosition = new Vec2(30, this.canvas.height / 2)
         this.paddle = new Paddle(this.data, paddlePosition, 5, paddleSize, "white")
 
+        this.data.addEntity(new Arena(this.data))
         this.data.addEntity(this.field)
         this.data.addEntity(this.paddle)
         this.data.addEntity(new Ball(this.data, this.paddle, ballPosition, ballVelocity, 5, "white"))
-        this.data.addEntity(new Arena(this.data))
         this.data.addEntity(new Scoreboard(this.data, 20, "red"))
 
         this.tick()
